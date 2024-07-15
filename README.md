@@ -39,18 +39,51 @@ To use the SunEditor field in your Laravel Nova resource, follow these steps:
 
 2. Add the field to the `fields` method of your Nova resource:
 
-    ```php
-    public function fields(Request $request)
-    {
-        return [
-            ID::make()->sortable(),
+```php
+public function fields(Request $request)
+{
+    return [
+        ID::make()->sortable(),
 
-            SunEditor::make('Content', 'content')
-                ->rules('required', 'string')
-                ->hideFromIndex(),
-        ];
-    }
-    ```
+        SunEditor::make('Content', 'content')
+            ->rules('required', 'string')
+            ->hideFromIndex(),
+    ];
+}
+```
+
+## File upload
+
+SunEditor supports uploading by drag&drop or pasting image directly into editor field. To enable upload, provide `withFiles()` method, like in `Trix` field:
+
+```php
+public function fields(Request $request)
+{
+    return [
+        ID::make()->sortable(),
+
+        SunEditor::make('Content', 'content')
+            ->withFiles('disk','path/to/attachments')
+    ];
+}
+```
+
+Unfortunately, upload does not work out of the box with fields in Nova Actions (Trix has same problem). If you need to upload files in Action modal, provide path to upload in settings and handle upload by yourself:
+
+```php
+public function fields(Request $request)
+{
+    return [
+        ID::make()->sortable(),
+
+        SunEditor::make('Content', 'content')
+            ->withFiles('disk','path/to/attachments')
+            ->settings([
+                'imageUploadUrl' => '/your/path/to/handle/upload',
+            ]),
+    ];
+}
+```
 
 ## Customization
 
@@ -91,6 +124,7 @@ I'm are actively seeking contributions to enhance this package. Here are some fe
 
 - [ ] multi-language
 - [ ] image browser
+- [ ] purging stale attachments like in `Trix` field
 
 ## Contributing
 
