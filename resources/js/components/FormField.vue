@@ -37,9 +37,7 @@ export default {
     mounted() {
         Nova.$on(this.fieldAttributeValueEventName, this.listenToValueChanges)
 
-        this.initEditor()
-
-        this.editor.onPaste = function (e, cleanData, maxCharCount, core) { console.log('onPaste', e) }
+        this.initEditor()        
     },
 
     beforeUnmount() {
@@ -52,16 +50,16 @@ export default {
             const buttonList = this.field.buttonList ?? Nova.config(`suneditor-buttonLists`)[buttonListName];
             const settings = this.field.settings ??  Nova.config(`suneditor-settings`);
 
-            console.log(settings);
-
             this.editor = suneditor.create(this.$refs.editor, {
                 plugins: {
                     picmo,
                     ...plugins
                 },
+                imageUploadUrl: `/nova-api/webard/nova-suneditor/${this.resourceName}/field-attachment/${this.fieldAttribute}`,
                 buttonList,
-                ...settings
+                ...settings,
             });
+
         },
         /*
          * Set the initial, internal value for the field.

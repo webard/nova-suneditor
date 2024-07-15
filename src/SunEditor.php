@@ -2,7 +2,9 @@
 
 namespace Webard\NovaSuneditor;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Contracts\Deletable as DeletableContract;
 use Laravel\Nova\Contracts\FilterableField;
 use Laravel\Nova\Contracts\Storable as StorableContract;
@@ -53,6 +55,29 @@ class SunEditor extends Field implements DeletableContract, FilterableField, Sto
     public function getStoragePath()
     {
         return null;
+    }
+
+    public function withFiles($disk = null, $path = '/')
+    {
+        $this->withFiles = true;
+
+        $this->disk($disk)->path($path);
+
+        $this->attach(function (Request $request) {
+            $request->validate([
+                'file-0' => ['required', 'file'],
+            ]);
+
+            $disk = $this->getStorageDisk() ?? $this->getDefaultStorageDisk();
+
+            return Storage::disk($disk)->url($request->file('file-0')->store($this->getStorageDir(), $disk));
+        })
+            //  ->detach(new DetachAttachment())
+            //  ->delete(new DeleteAttachments($this))
+            //  ->discard(new DiscardPendingAttachments())
+            ->prunable();
+
+        return $this;
     }
 
     /**

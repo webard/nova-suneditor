@@ -2,8 +2,11 @@
 
 namespace Webard\NovaSunEditor;
 
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
+use Laravel\Nova\Http\Middleware\Authenticate;
+use Laravel\Nova\Http\Middleware\Authorize;
 use Laravel\Nova\Nova;
 
 class FieldServiceProvider extends ServiceProvider
@@ -15,6 +18,9 @@ class FieldServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->app->booted(function () {
+            $this->routes();
+        });
 
         Nova::serving(function (ServingNova $event) {
             Nova::script('suneditor', __DIR__.'/../dist/js/field.js');
@@ -28,6 +34,25 @@ class FieldServiceProvider extends ServiceProvider
                 'suneditor-settings' => $settings,
             ]);
         });
+    }
+
+    /**
+     * Register the tool's routes.
+     *
+     * @return void
+     */
+    protected function routes()
+    {
+        if ($this->app->routesAreCached()) {
+            return;
+        }
+
+        // Nova::router(['nova', Authenticate::class, Authorize::class], 'nova-suneditor')
+        //     ->group(__DIR__.'/../routes/inertia.php');
+
+        Route::middleware(['nova', Authorize::class])
+            ->prefix('nova-api/webard/nova-suneditor')
+            ->group(__DIR__.'/../routes/api.php');
     }
 
     /**

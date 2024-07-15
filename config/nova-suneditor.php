@@ -6,6 +6,8 @@ return [
         'minHeight' => '200',
         'resizingBar' => false,
         'showPathLabel' => false,
+        'imageAccept' => '.jpg, .jpeg, .png, .gif',
+        'imageUploadSizeLimit' => 1024 * 1024 * 10,
     ],
     'buttonLists' => [
         'default' => [
