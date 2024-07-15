@@ -1,6 +1,6 @@
 <?php
 
-namespace Webard\NovaSuneditor;
+namespace Webard\NovaSunEditor;
 
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;

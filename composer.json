@@ -11,13 +11,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Webard\\NovaSuneditor\\": "src/"
+            "Webard\\NovaSunEditor\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Webard\\NovaSuneditor\\FieldServiceProvider"
+                "Webard\\NovaSunEditor\\FieldServiceProvider"
             ]
         }
     },
