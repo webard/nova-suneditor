@@ -1,16 +1,17 @@
 <template>
-    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
+    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent" style="overflow:hidden">
         <template #field>
 
             <a ref="emojianchor"></a>
             <textarea ref="editor" :id="field.attribute" :class="errorClasses" class="w-full" style="height:200px"
                 :value="value" />
+
         </template>
     </DefaultField>
 </template>
 
 <script>
-import { FormField, HandlesValidationErrors } from 'laravel-nova'
+import { DependentFormField, HandlesValidationErrors } from 'laravel-nova'
 
 import suneditor from 'suneditor'
 import plugins from 'suneditor/src/plugins'
@@ -19,28 +20,33 @@ import list from 'suneditor/src/plugins/submenu/list'
 import { EmojiButton } from '@joeattardi/emoji-button';
 
 export default {
-    mixins: [FormField, HandlesValidationErrors],
+    mixins: [DependentFormField, HandlesValidationErrors],
+    emits: ['field-changed'],
 
     props: ['resourceName', 'resourceId', 'field'],
     data() {
         return {
-            mounted: false
+            mounted: false,
+            index: 0,
         }
     },
 
     created() {
-
         this.setInitialValue()
-
-
     },
 
     mounted() {
+        Nova.$on(this.fieldAttributeValueEventName, this.listenToValueChanges)
+
         this.initEditor()
 
         this.editor.onPaste = function (e, cleanData, maxCharCount, core) { console.log('onPaste', e) }
 
         this.picker.on('emoji', (emoji) => { this.handleEmoji(emoji) });
+    },
+
+    beforeUnmount() {
+        Nova.$off(this.fieldAttributeValueEventName, this.listenToValueChanges)
     },
 
     methods: {
@@ -70,7 +76,10 @@ export default {
         },
 
         initEmojiPickerPlugin() {
-            this.picker = new EmojiButton();
+            this.picker = new EmojiButton({
+                position: 'bottom-start',
+               // rootElement: this.$refs.editor
+            });
 
             // Define the custom plugin
             return {
@@ -115,8 +124,19 @@ export default {
         /**
          * Fill the given FormData object with the field's internal value.
          */
+        handleChange(value) {
+            this.editor.setContents(value)
+
+            this.$emit('field-changed')
+        },
+
         fill(formData) {
-            formData.append(this.fieldAttribute, this.value || '')
+            this.fillIfVisible(formData, this.fieldAttribute, this.value || '')
+        },
+
+        onSyncedField() {
+            this.handleChange(this.currentField.value ?? this.value)
+            this.index++
         },
 
 
