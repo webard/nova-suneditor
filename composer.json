@@ -1,13 +1,16 @@
 {
     "name": "webard/nova-suneditor",
-    "description": "A Laravel Nova field.",
+    "description": "Custom field for Laravel Nova that integrates the SunEditor, a lightweight and flexible WYSIWYG editor",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "suneditor",
+        "wysiwyg"
     ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0"
+        "php": "^7.3|^8.0",
+        "laravel/nova": "^4.34"
     },
     "autoload": {
         "psr-4": {
@@ -23,6 +26,12 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "repositories": {
+        "nova": {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
