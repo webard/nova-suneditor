@@ -3,23 +3,24 @@
 namespace Webard\NovaSuneditor;
 
 use Illuminate\Support\Arr;
-use Laravel\Nova\Fields\Field;
-use Laravel\Nova\Fields\Expandable;
-use Laravel\Nova\Fields\HasAttachments;
-use Laravel\Nova\Fields\DependentFields;
-use Laravel\Nova\Fields\FieldFilterable;
-use Laravel\Nova\Contracts\FilterableField;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Fields\SupportsDependentFields;
 use Laravel\Nova\Contracts\Deletable as DeletableContract;
-use Laravel\Nova\Contracts\Storable as StorableContract;use Laravel\Nova\Fields\Filters\TextFilter;
+use Laravel\Nova\Contracts\FilterableField;
+use Laravel\Nova\Contracts\Storable as StorableContract;
+use Laravel\Nova\Fields\Expandable;
+use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Fields\FieldFilterable;
+use Laravel\Nova\Fields\Filters\TextFilter;
+use Laravel\Nova\Fields\HasAttachments;
+use Laravel\Nova\Fields\SupportsDependentFields;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
-class Suneditor extends Field implements FilterableField, DeletableContract, StorableContract
+class SunEditor extends Field implements DeletableContract, FilterableField, StorableContract
 {
-    use SupportsDependentFields;
     use Expandable;
     use FieldFilterable;
     use HasAttachments;
+    use SupportsDependentFields;
+
     /**
      * The field's component.
      *
@@ -27,17 +28,16 @@ class Suneditor extends Field implements FilterableField, DeletableContract, Sto
      */
     public $component = 'suneditor';
 
-     /**
+    /**
      * Indicates if the element should be shown on the index view.
      *
      * @var bool
      */
     public $showOnIndex = false;
 
-     /**
+    /**
      * Make the field filter.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return \Laravel\Nova\Fields\Filters\Filter
      */
     protected function makeFilter(NovaRequest $request)
@@ -55,11 +55,9 @@ class Suneditor extends Field implements FilterableField, DeletableContract, Sto
         return null;
     }
 
-
-      /**
+    /**
      * Hydrate the given attribute on the model based on the incoming request.
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  string  $requestAttribute
      * @param  \Illuminate\Database\Eloquent\Model|\Laravel\Nova\Support\Fluent  $model
      * @param  string  $attribute
@@ -70,7 +68,7 @@ class Suneditor extends Field implements FilterableField, DeletableContract, Sto
         return $this->fillAttributeWithAttachment($request, $requestAttribute, $model, $attribute);
     }
 
-     /**
+    /**
      * Prepare the field for JSON serialization.
      *
      * @return array
@@ -84,6 +82,21 @@ class Suneditor extends Field implements FilterableField, DeletableContract, Sto
                 'attribute',
             ]);
         });
+    }
+
+    public function buttonListName(string $name): self
+    {
+        return $this->withMeta(['buttonListName' => $name]);
+    }
+
+    public function buttonList(array $buttonList): self
+    {
+        return $this->withMeta(['buttonList' => $buttonList]);
+    }
+
+    public function settings(array $settings): self
+    {
+        return $this->withMeta(['settings' => $settings + config('nova-suneditor.settings', [])]);
     }
 
     /**

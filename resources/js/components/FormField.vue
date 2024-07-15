@@ -15,7 +15,8 @@ import { DependentFormField, HandlesValidationErrors } from 'laravel-nova'
 
 import suneditor from 'suneditor'
 import plugins from 'suneditor/src/plugins'
-import { EmojiButton } from '@joeattardi/emoji-button';
+
+import { picmo }  from 'suneditor-picmo-emoji'
 
 export default {
     mixins: [DependentFormField, HandlesValidationErrors],
@@ -39,8 +40,6 @@ export default {
         this.initEditor()
 
         this.editor.onPaste = function (e, cleanData, maxCharCount, core) { console.log('onPaste', e) }
-
-        this.picker.on('emoji', (emoji) => { this.handleEmoji(emoji) });
     },
 
     beforeUnmount() {
@@ -48,94 +47,20 @@ export default {
     },
 
     methods: {
-        resetCursorPos() {
-            const core = this.editor.core;
-            const editorNode = core.context.element.wysiwyg;
-
-            const lastChild = editorNode.lastChild;
-            const range = document.createRange();
-            const selection = window.getSelection();
-
-            // delay setting curor until after html insert
-            setTimeout(() => {
-                range.setStartAfter(lastChild);
-                range.collapse(true);
-                selection.removeAllRanges();
-                selection.addRange(range);
-
-                this.editor.core.focus();
-            }, 100);
-        },
-
-        handleEmoji(emoji) {
-            this.editor.insertHTML(emoji.emoji, true, true);
-            this.resetCursorPos();
-        },
-
-        initEmojiPickerPlugin() {
-            this.picker = new EmojiButton({
-                position: 'bottom-start',
-                // rootElement: this.$refs.editor
-            });
-
-            // Define the custom plugin
-            return {
-                name: 'emoji',
-                display: 'command',
-                title: 'Emoji',
-                buttonClass: '',
-                innerHTML: '<div class="se-btn-module"><button type="button" class="se-btn se-btn-module" title="Insert Emoji"><span>😀</span></button></div>',
-                add: function (core) { },
-                action: () => {
-
-                    this.picker.togglePicker(this.$refs.emojianchor);
-                }
-            };
-        },
-
         initEditor() {
+            const buttonListName = this.field.buttonListName ?? 'default';
+            const buttonList = this.field.buttonList ?? Nova.config(`suneditor-buttonLists`)[buttonListName];
+            const settings = this.field.settings ??  Nova.config(`suneditor-settings`);
+
+            console.log(settings);
+
             this.editor = suneditor.create(this.$refs.editor, {
                 plugins: {
-                    emoji: this.initEmojiPickerPlugin(),
+                    picmo,
                     ...plugins
                 },
-                height: 'auto',
-                minHeight: '200px',
-                buttonList: [
-                    [
-                        'undo',
-                        'redo',
-                        'fontSize',
-                        'formatBlock'
-                    ],
-                    [
-                        'fontColor',
-                        'hiliteColor',
-                        'bold',
-                        'underline',
-                        'italic',
-                        'strike',
-                        'list',
-                        'align',
-                        'outdent',
-                        'indent',
-                        'removeFormat',
-                    ],
-                    [
-                        'emoji',
-                        'table',
-                        'link',
-                        'image',
-                        'video',
-                        'horizontalRule'
-                    ],
-                    [
-                        'showBlocks',
-                        'codeView',
-                        'preview'
-                    ]
-                ]
-                // lang: lang.ko
+                buttonList,
+                ...settings
             });
         },
         /*
