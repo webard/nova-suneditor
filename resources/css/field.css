@@ -1,0 +1,7 @@
+/* Nova Field CSS */
+.emoji-picker__wrapper {
+    z-index: 100;
+    top: 50px !important;
+}
+
+@import "suneditor/dist/css/suneditor.min.css"
