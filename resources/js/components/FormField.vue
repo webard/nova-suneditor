@@ -1,5 +1,5 @@
 <template>
-    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent" style="overflow:hidden">
+    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
         <template #field>
 
             <a ref="emojianchor"></a>
@@ -15,8 +15,6 @@ import { DependentFormField, HandlesValidationErrors } from 'laravel-nova'
 
 import suneditor from 'suneditor'
 import plugins from 'suneditor/src/plugins'
-import image from 'suneditor/src/plugins/dialog/link'
-import list from 'suneditor/src/plugins/submenu/list'
 import { EmojiButton } from '@joeattardi/emoji-button';
 
 export default {
@@ -50,7 +48,6 @@ export default {
     },
 
     methods: {
-
         resetCursorPos() {
             const core = this.editor.core;
             const editorNode = core.context.element.wysiwyg;
@@ -78,7 +75,7 @@ export default {
         initEmojiPickerPlugin() {
             this.picker = new EmojiButton({
                 position: 'bottom-start',
-               // rootElement: this.$refs.editor
+                // rootElement: this.$refs.editor
             });
 
             // Define the custom plugin
@@ -87,7 +84,7 @@ export default {
                 display: 'command',
                 title: 'Emoji',
                 buttonClass: '',
-                innerHTML: '<div class="se-btn-module"><button type="button" class="se-btn se-btn-module" title="Insert HTML"><span>😀</span></button></div>',
+                innerHTML: '<div class="se-btn-module"><button type="button" class="se-btn se-btn-module" title="Insert Emoji"><span>😀</span></button></div>',
                 add: function (core) { },
                 action: () => {
 
@@ -98,19 +95,46 @@ export default {
 
         initEditor() {
             this.editor = suneditor.create(this.$refs.editor, {
-                plugins: [
-                    this.initEmojiPickerPlugin(),
-                    list,
-                    image,
-                    plugins.fontColor,
-                    plugins.fontSize,
-                    plugins.align,
-                    plugins.horizontalRule,
-                    plugins.table],
+                plugins: {
+                    emoji: this.initEmojiPickerPlugin(),
+                    ...plugins
+                },
                 height: 'auto',
+                minHeight: '200px',
                 buttonList: [
-                    ['fontColor', 'fontSize', 'emoji', 'list', 'bold', 'underline', 'italic', 'table', 'link', 'image', 'align', 'horizontalRule']
-                ],
+                    [
+                        'undo',
+                        'redo',
+                        'fontSize',
+                        'formatBlock'
+                    ],
+                    [
+                        'fontColor',
+                        'hiliteColor',
+                        'bold',
+                        'underline',
+                        'italic',
+                        'strike',
+                        'list',
+                        'align',
+                        'outdent',
+                        'indent',
+                        'removeFormat',
+                    ],
+                    [
+                        'emoji',
+                        'table',
+                        'link',
+                        'image',
+                        'video',
+                        'horizontalRule'
+                    ],
+                    [
+                        'showBlocks',
+                        'codeView',
+                        'preview'
+                    ]
+                ]
                 // lang: lang.ko
             });
         },
@@ -138,8 +162,6 @@ export default {
             this.handleChange(this.currentField.value ?? this.value)
             this.index++
         },
-
-
     },
 }
 </script>

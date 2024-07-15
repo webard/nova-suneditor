@@ -69,12 +69,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var laravel_nova__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-nova */ "../../vendor/laravel/nova/resources/js/mixins/packages.js");
 /* harmony import */ var suneditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! suneditor */ "./node_modules/suneditor/src/suneditor.js");
-/* harmony import */ var suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! suneditor/src/plugins */ "./node_modules/suneditor/src/plugins/index.js");
-/* harmony import */ var suneditor_src_plugins_dialog_link__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! suneditor/src/plugins/dialog/link */ "./node_modules/suneditor/src/plugins/dialog/link.js");
-/* harmony import */ var suneditor_src_plugins_submenu_list__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! suneditor/src/plugins/submenu/list */ "./node_modules/suneditor/src/plugins/submenu/list.js");
+/* harmony import */ var suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! suneditor/src/plugins */ "./node_modules/suneditor/src/plugins/index.js");
 /* harmony import */ var _joeattardi_emoji_button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @joeattardi/emoji-button */ "./node_modules/@joeattardi/emoji-button/dist/index.js");
-
-
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(e, r, t) { return (r = _toPropertyKey(r)) in e ? Object.defineProperty(e, r, { value: t, enumerable: !0, configurable: !0, writable: !0 }) : e[r] = t, e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 
 
 
@@ -141,7 +143,7 @@ __webpack_require__.r(__webpack_exports__);
         display: 'command',
         title: 'Emoji',
         buttonClass: '',
-        innerHTML: '<div class="se-btn-module"><button type="button" class="se-btn se-btn-module" title="Insert HTML"><span>😀</span></button></div>',
+        innerHTML: '<div class="se-btn-module"><button type="button" class="se-btn se-btn-module" title="Insert Emoji"><span>😀</span></button></div>',
         add: function add(core) {},
         action: function action() {
           _this3.picker.togglePicker(_this3.$refs.emojianchor);
@@ -150,9 +152,12 @@ __webpack_require__.r(__webpack_exports__);
     },
     initEditor: function initEditor() {
       this.editor = suneditor__WEBPACK_IMPORTED_MODULE_2__["default"].create(this.$refs.editor, {
-        plugins: [this.initEmojiPickerPlugin(), suneditor_src_plugins_submenu_list__WEBPACK_IMPORTED_MODULE_3__["default"], suneditor_src_plugins_dialog_link__WEBPACK_IMPORTED_MODULE_4__["default"], suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_5__["default"].fontColor, suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_5__["default"].fontSize, suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_5__["default"].align, suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_5__["default"].horizontalRule, suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_5__["default"].table],
+        plugins: _objectSpread({
+          emoji: this.initEmojiPickerPlugin()
+        }, suneditor_src_plugins__WEBPACK_IMPORTED_MODULE_3__["default"]),
         height: 'auto',
-        buttonList: [['fontColor', 'fontSize', 'emoji', 'list', 'bold', 'underline', 'italic', 'table', 'link', 'image', 'align', 'horizontalRule']]
+        minHeight: '200px',
+        buttonList: [['undo', 'redo', 'fontSize', 'formatBlock'], ['fontColor', 'hiliteColor', 'bold', 'underline', 'italic', 'strike', 'list', 'align', 'outdent', 'indent', 'removeFormat'], ['emoji', 'table', 'link', 'image', 'video', 'horizontalRule'], ['showBlocks', 'codeView', 'preview']]
         // lang: lang.ko
       });
     },
@@ -252,10 +257,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     field: $props.field,
     errors: _ctx.errors,
     "show-help-text": _ctx.showHelpText,
-    "full-width-content": _ctx.fullWidthContent,
-    style: {
-      "overflow": "hidden"
-    }
+    "full-width-content": _ctx.fullWidthContent
   }, {
     field: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", _hoisted_1, null, 512 /* NEED_PATCH */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("textarea", {
