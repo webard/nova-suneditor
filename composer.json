@@ -1,5 +1,5 @@
 {
-    "name": "webard/suneditor",
+    "name": "webard/nova-suneditor",
     "description": "A Laravel Nova field.",
     "keywords": [
         "laravel",
@@ -11,13 +11,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Webard\\Suneditor\\": "src/"
+            "Webard\\NovaSuneditor\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Webard\\Suneditor\\FieldServiceProvider"
+                "Webard\\NovaSuneditor\\FieldServiceProvider"
             ]
         }
     },

@@ -1,6 +1,6 @@
 <?php
 
-namespace Webard\Suneditor;
+namespace Webard\NovaSuneditor;
 
 use Laravel\Nova\Fields\Field;
 
