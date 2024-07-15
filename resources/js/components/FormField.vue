@@ -60,6 +60,8 @@ export default {
                 ...settings,
             });
 
+        
+
         },
         /*
          * Set the initial, internal value for the field.
@@ -78,7 +80,7 @@ export default {
         },
 
         fill(formData) {
-            this.fillIfVisible(formData, this.fieldAttribute, this.value || '')
+            this.fillIfVisible(formData, this.fieldAttribute, this.editor.getContents() || '')
         },
 
         onSyncedField() {
