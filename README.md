@@ -90,7 +90,6 @@ SunEditor::make('Content', 'content')
 I'm are actively seeking contributions to enhance this package. Here are some features I would love to see implemented:
 
 - [ ] multi-language
-- [ ] upload images by pasting
 - [ ] image browser
 
 ## Contributing
