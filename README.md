@@ -18,7 +18,7 @@ To install the custom field, follow these steps:
 1. Install the package via Composer:
 
     ```sh
-    composer require webard/nova-suneditor-field
+    composer require webard/nova-suneditor
     ```
 
 2. Publish the assets:
