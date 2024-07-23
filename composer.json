@@ -10,7 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "laravel/nova": "^4.34"
+        "laravel/nova": "^4.20"
     },
     "autoload": {
         "psr-4": {
@@ -36,6 +36,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "laravel/pint": "^1.16"
+        "laravel/pint": "^1.0"
     }
 }
