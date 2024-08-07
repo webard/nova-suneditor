@@ -1,19 +1,10 @@
 <template>
-    <DefaultField
-        :field="currentField"
-        :errors="errors"
-        :show-help-text="showHelpText"
-        :full-width-content="fullWidthContent">
+    <DefaultField :field="currentField" :errors="errors" :show-help-text="showHelpText" :index="index"
+        :id="field.attribute" :full-width-content="fullWidthContent">
         <template #field>
             <a ref="emojianchor"></a>
-            <textarea
-                ref="editor"
-                :id="field.attribute"
-                :class="errorClasses"
-                class="w-full"
-                style="height:200px"
-                :value="value"
-            />
+            <textarea ref="editor" :id="field.attribute" :class="errorClasses" class="w-full" style="height:200px"
+                :value="value" />
         </template>
     </DefaultField>
 </template>
@@ -24,7 +15,7 @@ import { DependentFormField, HandlesValidationErrors } from 'laravel-nova'
 import suneditor from 'suneditor'
 import plugins from 'suneditor/src/plugins'
 
-import { picmo }  from 'suneditor-picmo-emoji'
+import { picmo } from 'suneditor-picmo-emoji'
 
 export default {
     mixins: [DependentFormField, HandlesValidationErrors],
@@ -39,14 +30,14 @@ export default {
     },
 
     watch: {
-    currentlyIsVisible(current, previous) {
-      if (current === true && previous === false) {
-        this.$nextTick(() => this.handleShowingComponent())
-      } else if (current === false && previous === true) {
-        this.handleHidingComponent()
-      }
+        currentlyIsVisible(current, previous) {
+            if (current === true && previous === false) {
+                this.$nextTick(() => this.handleShowingComponent())
+            } else if (current === false && previous === true) {
+                this.handleHidingComponent()
+            }
+        },
     },
-  },
 
     created() {
         this.setInitialValue()
@@ -55,7 +46,9 @@ export default {
     mounted() {
         Nova.$on(this.fieldAttributeValueEventName, this.listenToValueChanges)
 
-        this.initEditor()        
+        if (this.isVisible) {
+            this.handleShowingComponent();
+        }
     },
 
     beforeUnmount() {
@@ -66,7 +59,7 @@ export default {
         initEditor() {
             const buttonListName = this.field.buttonListName ?? 'default';
             const buttonList = this.field.buttonList ?? Nova.config(`suneditor-buttonLists`)[buttonListName];
-            const settings = this.field.settings ??  Nova.config(`suneditor-settings`);
+            const settings = this.field.settings ?? Nova.config(`suneditor-settings`);
 
             this.editor = suneditor.create(this.$refs.editor, {
                 plugins: {
@@ -78,7 +71,7 @@ export default {
                 ...settings,
             });
 
-        
+
 
         },
 
@@ -96,9 +89,11 @@ export default {
          * Fill the given FormData object with the field's internal value.
          */
         handleChange(value) {
-            this.editor.setContents(value)
+            if (this.isVisible) {
+                this.editor.setContents(value)
 
-            this.$emit('field-changed')
+                this.$emit('field-changed')
+            }
         },
 
         fill(formData) {
@@ -112,10 +107,11 @@ export default {
 
         handleShowingComponent() {
             this.initEditor();
+            this.handleChange(this.currentField.value ?? this.value)
         },
 
         handleHidingComponent() {
-            this.destroyEditor()        
+            this.destroyEditor()
         },
     },
 }
