@@ -1,11 +1,19 @@
 <template>
-    <DefaultField :field="field" :errors="errors" :show-help-text="showHelpText" :full-width-content="fullWidthContent">
+    <DefaultField
+        :field="currentField"
+        :errors="errors"
+        :show-help-text="showHelpText"
+        :full-width-content="fullWidthContent">
         <template #field>
-
             <a ref="emojianchor"></a>
-            <textarea ref="editor" :id="field.attribute" :class="errorClasses" class="w-full" style="height:200px"
-                :value="value" />
-
+            <textarea
+                ref="editor"
+                :id="field.attribute"
+                :class="errorClasses"
+                class="w-full"
+                style="height:200px"
+                :value="value"
+            />
         </template>
     </DefaultField>
 </template>
@@ -29,6 +37,16 @@ export default {
             index: 0,
         }
     },
+
+    watch: {
+    currentlyIsVisible(current, previous) {
+      if (current === true && previous === false) {
+        this.$nextTick(() => this.handleShowingComponent())
+      } else if (current === false && previous === true) {
+        this.handleHidingComponent()
+      }
+    },
+  },
 
     created() {
         this.setInitialValue()
@@ -63,6 +81,10 @@ export default {
         
 
         },
+
+        destroyEditor() {
+            // this.editor.destroy();
+        },
         /*
          * Set the initial, internal value for the field.
          */
@@ -86,6 +108,14 @@ export default {
         onSyncedField() {
             this.handleChange(this.currentField.value ?? this.value)
             this.index++
+        },
+
+        handleShowingComponent() {
+            this.initEditor();
+        },
+
+        handleHidingComponent() {
+            this.destroyEditor()        
         },
     },
 }
