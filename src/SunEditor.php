@@ -38,6 +38,23 @@ class SunEditor extends Field implements DeletableContract, FilterableField, Sto
     public $showOnIndex = false;
 
     /**
+     * Construct a new field.
+     * @param $name
+     * @param $attribute
+     * @param callable|null $resolveCallback
+     */
+    public function __construct( $name, $attribute = null, callable $resolveCallback = null ) {
+        parent::__construct($name, $attribute, $resolveCallback);
+
+        // Add X-CSRF-TOKEN to the header of the image upload request
+        $this->settings([
+            'imageUploadHeader' => [
+                'X-CSRF-TOKEN' => csrf_token(),
+            ]
+        ]);
+    }
+
+    /**
      * Make the field filter.
      *
      * @return \Laravel\Nova\Fields\Filters\Filter
