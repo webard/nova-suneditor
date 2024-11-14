@@ -97,7 +97,7 @@ export default {
         },
 
         fill(formData) {
-            this.fillIfVisible(formData, this.fieldAttribute, this.editor.getContents() || '')
+            this.fillIfVisible(formData, this.fieldAttribute, this.editor?.getContents() || '')
         },
 
         onSyncedField() {
