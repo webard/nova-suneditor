@@ -115,7 +115,7 @@ class SunEditor extends Field implements DeletableContract, FilterableField, Sto
      *
      * @return array
      */
-    public function serializeForFilter()
+    public function serializeForFilter(): array
     {
         return transform($this->jsonSerialize(), function ($field) {
             return Arr::only($field, [
